@@ -1,25 +1,29 @@
 #include "automata.h"
 #include<fstream>
 
+template<typename T> void printElement(T t, const int& width) {
+	const char separator    = ' ';
+    std::cout << std::left << std::setw(width) << std::setfill(separator) << t;
+}
 
-
-Automata::Automata(){
+Automata::Automata() {
 		get_data_from_file();
 }
 
-void Automata::get_data_from_file()
-{
+void Automata::get_data_from_file() {
 	std::string line;
 	std::ifstream file;
     file.open("test.txt");
 
    if(!file.is_open()) {
-      std::cout << "erro file" << std::endl;
+      std::cout << "error file" << std::endl;
    }
    
    	std::vector<std::string> _tmp_vector;
+   	//get line by line 
     getline(file,line);
-    this->_nb_transitions_possible = atoi(line.c_str());
+    this->_nb_transitions_available = atoi(line.c_str());
+
     getline(file,line);
     this->_nb_states = atoi(line.c_str());
 
@@ -47,7 +51,6 @@ void Automata::display() const{
 
 	std::cout << "initial state(s):" << std::endl;
 	
-	std::string tmp ="";
 	for(std::map<int,std::vector<std::string> >::const_iterator at = this->_init_states.begin(); at != this->_init_states.end(); ++at) {
 		std::cout << (at->second).front()  << std::endl;
 	}
@@ -59,9 +62,7 @@ void Automata::display() const{
 		std::cout << (at->second).front()  << std::endl;
 	}
 
-
-
-	std::cout << "transitions tables:" << std::endl;
+	std::cout << "transition table:" << std::endl;
 	this->transitions_table();
 
 	 //for(std::vector<std::string>::const_iterator it = this->_transitions.begin(); it != this->_transitions.end(); ++it) {
@@ -75,32 +76,27 @@ void Automata::transitions_table() const {
 
 	std::map<int,std::vector<std::string> > table;
 
-	
-
-
-	for(int i=0; i< this->_nb_states; i++)
-	{
-		//std::cout <<"i"<< i << std::endl;
-		std::string  array[] = {"-","-"};
-		std::vector<std::string> _tmp_transitions(std::begin(array),std::end(array));
+	// for each state, the algo go trought the _transitions vector to map its transitions  map[state] = [transitions(a),transitions(b)...];
+	for(int i=0; i< this->_nb_states; i++) {
+		// initialisation of the vector 
+		std::vector<std::string> _tmp_transitions;
+		for(int i = 0; i < this->_nb_transitions_available; i++) {
+			_tmp_transitions.push_back("-");
+		}
 
 		for(std::vector<std::string>::const_iterator it = this->_transitions.begin(); it != this->_transitions.end(); ++it) {
 		 	//std::cout << "transition" <<*it << std::endl;
-		 	
 		 	 
-		 	if(atoi(&(*it)[0])==i and *it != "")
-		 	{
+		 	if(atoi(&(*it)[0])==i and *it != "") {
 		 		
-		 		if(((_tmp_transitions[int((*it)[1])-97]) != "-"))
-				{
+		 		if(((_tmp_transitions[int((*it)[1])-97]) != "-")) {
 					//std::cout <<"sup" << std::endl;
 					_tmp_transitions[int((*it)[1])-97] =  _tmp_transitions[int((*it)[1])-97]+"," + (*it)[2];
 					
 		 		}
-		 		else
-		 		{
-		 				//std::cout <<"=0" << std::endl;
-		 				_tmp_transitions[int((*it)[1])-97] = (*it)[2];
+		 		else {
+		 			//std::cout <<"=0" << std::endl;
+		 			_tmp_transitions[int((*it)[1])-97] = (*it)[2];
 		 		}
 		 	}
 
@@ -112,33 +108,34 @@ void Automata::transitions_table() const {
 
 		}
 
+		// map state i to its transition vector 
 		table[i] = _tmp_transitions;
 		_tmp_transitions.clear();
-	}
 
+	}
 	display_transition_table(table);
 
 }
 
 
-void Automata::display_transition_table(std::map<int,std::vector<std::string> > table) const{
-	std::string banner ="S";
-	for(int i=0; i< this->_nb_transitions_possible; i++)
-	{
-		banner = banner + "   " + char(97+i);
+void Automata::display_transition_table(std::map< int,std::vector<std::string> > table) const {
+	const int nameWidth     = 6;
+    const int numWidth      = 8;
+
+    // display banner with available states
+	printElement("S", nameWidth);
+	for(int i=0; i<this->_nb_transitions_available; i++) {
+		printElement(char(97+i), numWidth);
 	}
-	std::cout << banner  << std::endl;
+	std::cout << std::endl;
 
-	for(std::map<int,std::vector<std::string> >::const_iterator at = table.begin(); at != table.end(); ++at) {
-		 	
-		 	std::string tmp = std::to_string(at->first);
-		 	std::string value;
+	// printElement is a template (function) to display data with good indentation 
+    for(std::map<int,std::vector<std::string> >::const_iterator at = table.begin(); at != table.end(); ++at) {
+    		printElement(at->first, nameWidth);
 		 	for(std::vector<std::string>::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
-		 	tmp = tmp + "   " + *it ;
-
+		 		printElement(*it, numWidth);
 		}
-
-		std::cout << tmp  << std::endl;
+		std::cout << std::endl;
 	}
 
 }
