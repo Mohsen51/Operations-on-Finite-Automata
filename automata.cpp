@@ -72,53 +72,12 @@ void Automata::display() const{
 }
 
 
-void Automata::transitions_table()  {
 
-	std::vector<std::vector<std::string> > table(this->_nb_transitions_available, std::vector<std::string> (1, "-"));
-	 
-	// for each state, the algo go trought the _transitions vector to map its transitions  map[state] = [transitions(a),transitions(b)...];
-	for(int i=0; i< this->_nb_states; i++) {
-
-		for(std::vector<std::string>::const_iterator it = this->_transitions.begin(); it != this->_transitions.end(); ++it) {
-		 //	std::cout << "transition" <<*it << std::endl;
-		 	
-		 	if((atoi(&(*it)[0])==i) && (*it != "")) {		
-		 		if(it->at(1) == '*') {	
-		 			for(int j = 0; j < this->_nb_transitions_available; j++) {
-		 			std::string save = std::string("(") + (*it)[2] + std::string(")");
-
-		 			table[j].push_back(save);
-		 			}
-				 }
-		 		else{
-		 			std::string save = std::string("") + (*it)[2] + std::string("");
-		 			table[int((*it)[1])-97].push_back(save);
-			 	}
-
-			 		
-		 		
-		 	}
-
-		}
-	
-		// map state i to its transition vector 
-		
-		this->_transitions_table[i] = table;
-		for(int x=0;x<this->_nb_transitions_available;x++){
-			table[x].clear();
-		}
-	
-
-	  
-
-	}
-
-}	
 
 void Automata::display_transition_table() const {
 	const int nameWidth     = 5;
     const int numWidth      = 20;
-	std::cout << "disply"<<std::endl;
+	std::cout << "display"<<std::endl;
     // display banner with available states
 	printElement("S", nameWidth);
 	for(int i=0; i<this->_nb_transitions_available; i++) {
@@ -132,7 +91,7 @@ void Automata::display_transition_table() const {
 		 	for(std::vector<std::vector<std::string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
 		 		std::string tmp = "";
 		 		for(std::vector<std::string>::const_iterator et = it->begin(); et != it->end(); ++et){
-		 			tmp += *et;
+		 			tmp += *et+" ";
 		 		}
 		 		if(tmp =="")
 		 		{
@@ -148,150 +107,155 @@ void Automata::display_transition_table() const {
 
 ///////////// only for asynchronous automata ///////////////////
 
+void Automata::is_an_asynchronous_automaton() const{
+	std::vector<std::string>  tmp;
+	for(std::vector<std::string>::const_iterator line = this->_transitions.begin(); line != this->_transitions.end(); ++line) {
+		if(42==(int((*line)[1]))){
+			std::string l;
+			l = *line;
+			tmp.push_back(l);
+		}
+	}
+
+
+	if(tmp.size()>1){
+		std::cout << "the automata is asynchronous" << std::endl;
+		std::cout << "the following transitions are astnchronous:" << std::endl;
+		for(std::vector<std::string>::const_iterator line = tmp.begin(); line != tmp.end(); ++line) {
+			std::cout << *line << std::endl;
+
+		}
+	}
+}
+
+
+void Automata::display_asynchronous_to_synchronous(){
+	
+	std::vector<std::string>  states;
+	std::map<int,std::vector<std::vector<std::string> > > map1;
+	std::vector<std::vector<std::string> >  table(this->_nb_transitions_available, std::vector<std::string> (1, "-"));
+
+
+	/*for(std::map<int,std::vector<std::string> >::const_iterator at = this->_init_states.begin(); at != this->_init_states.end(); ++at) {
+		states = at->second;
+		for(std::vector<std::string>::const_iterator it = states.begin(); it != states.end(); ++it) {
+				std::cout << *it << std::endl;
+		}
+	}*/
+	
+	
+	
+		for(int i=0;i<this->_nb_states;i++){
+			std::vector<std::string> list;
+			for(int t=0;t<this->_nb_transitions_available;t++){
+				//states[0].size()-1
+				//std::cout <<"i:"<<states[0][i]<< std::endl;
+				this->recursive(t,i,0,this->_transitions,list);
+				
+				std::sort(list.begin(), list.end()); 
+				list.erase(std::unique(list.begin(), list.end()), list.end());
+				
+				/*for(std::vector<std::string>::const_iterator line = list.begin(); line != list.end(); ++line) {
+				std::cout << *line << std::endl;
+				}*/
+				table[t]=list;
+				
+				list.clear();
+		}
+		this->_transitions_table[i] = table;
+		for(int x=0;x<this->_nb_transitions_available;x++){
+			table[x].clear();
+		}
+   		
+
+		
+
+	}
+
+}
+
 void Automata::asynchronous_to_synchronous(){
-	// replace epsilon transition by its real value
-	int i=0;
-	int j=0;
-	int h=0;
-	std::vector<std::string> tmp_vec;
-	std::vector<std::vector<std::string> > tmp(this->_nb_transitions_available, std::vector<std::string> (1, "-"));
-	 for(std::map<int,std::vector<std::vector<std::string> > >::const_iterator at = this->_transitions_table.begin(); at != this->_transitions_table.end(); ++at) {
-    		
-		 	for(std::vector<std::vector<std::string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
-		 			for(std::vector<std::string>::const_iterator et = it->begin(); et != it->end(); ++et){
-		 				if(j==1){
-							std::cout << i <<":"<<"b"<< std::endl;
-		 				}
-		 				else {
-		 					std::cout << i <<":"<< "a"<< std::endl;
-		 				}
-		 				std::cout << "DATA in"<< *et<< std::endl;
-		 				
-		 				this->_transitions_table[i][j][h] = recursive (*et,this->_transitions_table ,tmp_vec,j,h); 
-		 				
-		 				++h;
-		 				}	
-		 				h=0;
+	std::vector<std::string>  states;
+	std::map<int,std::vector<std::vector<std::string> > > map1;
+	std::vector<std::vector<std::string> >  table(this->_nb_transitions_available, std::vector<std::string> (1, "-"));
 
 
-					//remove duplicate character
+	for(std::map<int,std::vector<std::string> >::const_iterator at = this->_init_states.begin(); at != this->_init_states.end(); ++at) {
+		states = at->second;
+		for(std::vector<std::string>::const_iterator it = states.begin(); it != states.end(); ++it) {
+				std::cout << *it << std::endl;
+		}
+	}
+	
+	while(states){
+		for(int t=0;t<this->_nb_transitions_available;t++){
+			std::vector<std::string> list;
+			for(int i=0;i<this->states[0].size()-1;i++){
+				this->recursive(t,i,0,this->_transitions,list);	
+				
+				/*for(std::vector<std::string>::const_iterator line = list.begin(); line != list.end(); ++line) {
+						std::cout << *line << std::endl;
+				}*/
+				
+				
+						
+			}   		
 
-				/*	for(int y=0;y<this->_transitions_table[i][j].length();y++) {
-						for(int z=0;z<this->_transitions_table[i][j].length();z++){
-							if((z != y) && this->_transitions_table[i][j][z] == this->_transitions_table[i][j][y]){
-								this->_transitions_table [i][j].erase(z);
-							}
-						}
-					}*/
+		}
+		std::sort(list.begin(), list.end()); 
+		list.erase(std::unique(list.begin(), list.end()), list.end());
+		table[t] = list;
+		list.clear();
+		map[]
+		for(int x=0;x<this->_nb_transitions_available;x++){
+				table[x].clear();
+		}
+	}
 
-					//remove unexpected character
-				/*	if(std::regex_search(this->_transitions_table[i][j], std::regex(",\\([0-9]\\)"))){
-			 			this->_transitions_table[i][j] =  std::regex_replace(this->_transitions_table[i][j] , std::regex(",\\([0-9]\\)"), "");
-			 		}
-			 		else {
-			 			if(std::regex_match(this->_transitions_table [i][j], std::regex("\\([0-9]\\)"))){
-			 			this->_transitions_table[i][j] = std::regex_replace(this->_transitions_table[i][j] , std::regex("\\([0-9]\\)"), "-");
-				 		}
-				 		else	{
-				 		this->_transitions_table[i][j] = std::regex_replace(this->_transitions_table[i][j] , std::regex("\\([0-9]\\)"), "");
-				 		}
-				 	}*/
-		 			
-					 		for(std::vector<std::string>::const_iterator et = tmp_vec.begin(); et != tmp_vec.end(); ++et){
-					 			//if(!(std::regex_search(*et, std::regex("\\([0-9]\\)"))))
-					 			this->_transitions_table[i][j].push_back(*et);
-					 		}
-					 	
-					 
-		 		
-					j++;
-					tmp_vec.clear();
+}
+
+
+
+
+
+
+
+void Automata::recursive(int t,int i,int lamba,std::vector<std::string> _transitions,std::vector<std::string> &list) const {
+
+	for(std::vector<std::string>::const_iterator line = _transitions.begin(); line != _transitions.end(); ++line) {
+		//std::cout <<*line <<" t"<<t << " i"<<i<< "lambda" << lamba <<std::endl;
+		
+	if((*line)!=" "){
+		if(( ((*line)[0]==(*line)[2] && (int((*line)[1])-97)==t && !lamba && (atoi(&(*line)[0])==i)) || ((atoi(&(*line)[0])==i) && (t==(int((*line)[1])-97)) && !lamba))){
+			//std::cout <<"1"<< std::endl;
+			std::string tmp;
+			tmp = line[0][2];
+			list.push_back(tmp);
+			
+			recursive(t,atoi(&(*line)[2]),1,_transitions,list);
+
+		}
+
+		else{
+			if( (atoi(&(*line)[0])==i) && (42==(int((*line)[1]))) && lamba){
+				//std::cout <<"2"<< std::endl;
+				std::string tmp;
+				tmp = line[0][2];
+				list.push_back(tmp);
+				recursive(t,atoi(&(*line)[2]),1,_transitions,list);
+			}
+			else{
+				if((atoi(&(*line)[0])==i) && (42==(int((*line)[1]))) && !lamba){
+					//std::cout <<"3"<< std::endl;
+					recursive(t,atoi(&(*line)[2]),0,_transitions,list);
 				}
-			i++;
-			j=0;
+			}
+
+
 		}
-
 	}
-/////////////////////////////////////////////////////
-
-
-
-
-std::string Automata::recursive(std::string line, std::map<int,std::vector<std::vector<std::string> > > table,std::vector<std::string> &tmp_vec,int j,int h) const {
-	std::smatch m;
-	int tmp = 0;
-	int &x = tmp;
-
-	if( std::regex_search(line,m, std::regex("\\([0-9]\\)"))) {
-		
-		/*std::string value_to_replace;
-		for (unsigned i=0; i<m.size(); ++i) {
-	   		value_to_replace+= m.str(i);
-	 	}
- 		
-	 	x = value_to_replace[1]-'0';
-	 	std::cout << x << ":" <<table[tmp][j] << std::endl;
-	*/	tmp = line[1]-'0';
-		std::cout << "value: " <<  line << std::endl;
-	 	std::cout << tmp <<":"<<j << ":" <<h << std::endl;
-
-	 	
-	 	std::map<int,std::vector<std::vector<std::string> > >::iterator iter = std::next(table.begin(), x);
-		std::map<int,std::vector<std::vector<std::string> > >::iterator iterend = std::next(table.begin(), x+1);
-
-	 	for(std::map<int,std::vector<std::vector<std::string> > >::const_iterator at = iter; at != iterend; ++at) {
-	 		std::vector<std::vector<std::string> > ::const_iterator iter2 = std::next((at->second).begin(), j);
-			std::vector<std::vector<std::string> > ::const_iterator iterend2 = std::next((at->second).begin(), j+1);
-		 	for(std::vector<std::vector<std::string> >::const_iterator it = iter2; it != iterend2; ++it) {
-		 		for(std::vector<std::string>::const_iterator et = it->begin(); et != it->end(); ++et){
-		 			
-		 				std::cout <<"in"<<*et <<std::endl;
-		 			
-		 			if( std::regex_search(line,m, std::regex("\\([0-9]\\)")) ) {
-				 			tmp_vec.push_back(recursive(*et,table,tmp_vec,j,h));
-				 		
-					 		
-				 			
-				 	}
-				 	if(	std::regex_search(line,m, std::regex("[0-9]"))){
-				 			tmp_vec.push_back(line);
-				 			
-				 	}
-				 	
-		 		std::cout <<"et" << *et << "end" <<std::endl;
-		 		}
-
-		 		
-		 }		
-	 	
-	 	
-		}
-	return "";
 	}
-	if(std::regex_search(line, std::regex("[0-9]"))) {
-		
-		std::map<int,std::vector<std::vector<std::string> > >::iterator iter = std::next(table.begin(), atoi(line.c_str()));
-		std::map<int,std::vector<std::vector<std::string> > >::iterator iterend = std::next(table.begin(), atoi(line.c_str())+1);
-		
-	 	for(std::map<int,std::vector<std::vector<std::string> > >::const_iterator at = iter; at != iterend; ++at) {
-	 		std::vector<std::vector<std::string> > ::const_iterator iter2 = std::next((at->second).begin(), j);
-			std::vector<std::vector<std::string> > ::const_iterator iterend2 = std::next((at->second).begin(), j+1);
-		 	for(std::vector<std::vector<std::string> >::const_iterator it = iter2; it != iterend2; ++it) {
-		 			for(std::vector<std::string>::const_iterator et = it->begin(); et != it->end(); ++et){
-		 				std::cout <<*et<<std::endl;
-		 				/*if( !(std::regex_search(*et, std::regex("\\([0-9]\\)")))) {
-		 				std::cout <<"test"<<std::endl;
-		 				tmp_vec.push_back(*et);
-
-		 			}*/
-		 		}
-		 	}
-		 }
-		return line;
-	}
-	else{
-	return "";
-	}
+	
 
 }
 

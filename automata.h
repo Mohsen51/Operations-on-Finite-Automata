@@ -15,8 +15,8 @@ class Automata{
 
 		void display() const;
 		void transitions_table() ;
-		
-		
+		void is_an_asynchronous_automaton() const;
+		void asynchronous_to_synchronous();
 
 	private:
 		int _nb_transitions_available;
@@ -30,8 +30,9 @@ class Automata{
 
 		void get_data_from_file();
 		void display_transition_table( ) const;
-		void asynchronous_to_synchronous();
-		std::string recursive(std::string, std::map<int,std::vector<std::vector<std::string> > > ,	std::vector<std::string>&,int,int ) const;
+		
+		
+		void recursive(int ,int,int ,std::vector<std::string>,std::vector<std::string>&) const;
 
 		
 };
