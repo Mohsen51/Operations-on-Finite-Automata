@@ -106,10 +106,10 @@ void Automata::display_transition_table() const {
 
 }
 
-void Automata::display_transition_table2() const {
+void Automata::display_complete_dererministic_automaton() const {
 	const int nameWidth     = 6;
     const int numWidth      = 15;
-	cout << "display"<<endl;
+	cout << "display_complete_dererministic_automaton"<<endl;
     // display banner with available states
 	printElement("S", nameWidth);
 	for(int i=0; i<this->_nb_transitions_available; i++) {
@@ -137,8 +137,9 @@ void Automata::display_transition_table2() const {
 
 ///////////// only for asynchronous automata ///////////////////
 
-void Automata::is_an_asynchronous_automaton() const{
+bool Automata::is_an_asynchronous_automaton() const{
 	vector<string>  tmp;
+	int i=0;
 	for(vector<string>::const_iterator line = this->_transitions.begin(); line != this->_transitions.end(); ++line) {
 		if(42==(int((*line)[1]))){
 			string l;
@@ -149,6 +150,7 @@ void Automata::is_an_asynchronous_automaton() const{
 
 
 	if(tmp.size()>1){
+		i=1;
 		cout << "the automata is asynchronous" << endl;
 		cout << "the following transitions are astnchronous:" << endl;
 		for(vector<string>::const_iterator line = tmp.begin(); line != tmp.end(); ++line) {
@@ -159,6 +161,81 @@ void Automata::is_an_asynchronous_automaton() const{
 	else {
 		cout << "the automata is synchronous" << endl;
 	}
+	return i;
+}
+
+bool Automata::is_deterministic() const {
+	int i=0;
+	if(_init_states.begin()->first>1){
+		i=1;
+		cout <<" not deterministic because of mutiple entries"<< endl;
+	}
+	int j;
+	for(map<int,vector<vector<string> > >::const_iterator at = this->_transitions_table.begin(); at != this->_transitions_table.end(); ++at) {
+			j = 0;
+		 	for(vector<vector<string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
+		 		string tmp = "";
+		 		for(vector<string>::const_iterator et = it->begin(); et != it->end(); ++et){
+		 			tmp += *et+" ";
+		 		}
+		 		
+		 		if( tmp.size()>2)
+		 		{
+		 			i=1;
+		 			cout << " not deterministic because of mutiple transitons possible for state " << at->first<< " transition "<< char(97+j)<< endl;
+		 		}
+		 	j++;	
+		}
+		
+	}
+	return i;
+
+}
+
+void Automata::complete() {
+	int i = 0;
+	 for(map<string,vector<string>  >::iterator at = this->deter.begin(); at != this->deter.end(); ++at) {
+		 	for(vector<string> ::iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
+		 		string tmp;
+		 		tmp = *it;
+		 		if(tmp =="")
+		 		{
+		 			i = 1;
+		 			*it = "P";
+		 		}
+		 
+		}
+	}
+
+	if(i == 1){
+		for(int j=0;j<this->_nb_transitions_available;j++){
+			this->deter["P"].push_back("P");
+		}
+		
+	}
+}
+
+bool Automata::is_complete() const {
+	int i = 0;
+	int j = 0;
+	for(map<int,vector<vector<string> > >::const_iterator at = this->_transitions_table.begin(); at != this->_transitions_table.end(); ++at) {
+			j = 0;
+		 	for(vector<vector<string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
+		 		string tmp = "";
+		 		for(vector<string>::const_iterator et = it->begin(); et != it->end(); ++et){
+		 			tmp += *et+" ";
+		 		}
+		 		if(tmp =="")
+		 		{
+		 			i=1;
+		 			cout << "state " << at->first<< " transition "<< char(97+j)<<" not complite"<< endl;
+		 		}
+		 	j++;	
+		}
+		
+	}
+
+	return i;
 }
 
 
@@ -258,11 +335,11 @@ void Automata::determinaze(){
 	
 	rec(this->_init_states[_init_states.begin()->first],this->_nb_transitions_available,this->_transitions_table,map1);
 	
-	for(map<string,vector<string> >::const_iterator at = map1.begin(); at != map1.end(); ++at) {
+	/*for(map<string,vector<string> >::const_iterator at = map1.begin(); at != map1.end(); ++at) {
 		for(vector<string>::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
 				cout << *it << endl;
 		}
-	}
+	}*/
 
 	this->deter = map1;
 			

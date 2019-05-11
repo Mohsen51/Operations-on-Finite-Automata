@@ -16,11 +16,14 @@ class Automata{
 
 		void display() const;
 		void transitions_table() ;
-		void is_an_asynchronous_automaton() const;
+		bool is_an_asynchronous_automaton() const;
 		void asynchronous_to_synchronous();
 		void determinaze();	
-		void display_transition_table2() const;
+		void display_complete_dererministic_automaton() const;
 		void synchronous_transition_table() ;
+		bool is_complete() const ;
+		bool is_deterministic() const;
+		void complete();
 
 	private:
 		int _nb_transitions_available;
