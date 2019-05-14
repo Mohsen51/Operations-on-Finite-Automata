@@ -28,8 +28,8 @@ class Automata{
 
 		std::vector<std::string> split_string(std::string );
 		std::string concate_vector(std::vector<std::string>);
-		std::vector<std::string> remove_duplicate(std::vector<std::string> vec );
-		
+		std::vector<std::string> remove_duplicate_vector(std::vector<std::string>  );
+		std::string remove_duplicate_string(std::string  );
 
 	private:
 		void get_data_from_file(string);

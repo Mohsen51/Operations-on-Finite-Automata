@@ -32,9 +32,10 @@ void Automata::get_data_from_file(string name) {
     string z = line.substr(0,1);
     int size = atoi(z.c_str());
    
-    for(int i=0;i<size;i++){
-    	 string tmp = line.substr(i+1,i+2);
-    	_tmp_vector.push_back(tmp);
+    for(int i=0;i<(size*2)-1;i++){
+    	 char tmp = line[i+2];
+    	string s(1, tmp);	 
+    	_tmp_vector.push_back(s);
     }
 
     this->_init_states[atoi(&line[0])] = _tmp_vector;
@@ -346,18 +347,26 @@ std::vector<std::string> Automata::split_string(std::string str) {
 std::string Automata::concate_vector(std::vector<std::string> str){
 	string tmp ="";
 	for(int h=0;h<str.size();h++){
-		tmp+=str[h];
+		if(str[h]!=" ")
+			tmp+=str[h];
 	}
 
 	return tmp;
 }
 
 //work for bith string and vector
-std::vector<std::string> Automata::remove_duplicate(std::vector<std::string> vec ){
+std::vector<std::string> Automata::remove_duplicate_vector(std::vector<std::string> vec ){
 	std::sort(vec.begin(), vec.end());
 	vec.erase(std::unique(vec.begin(), vec.end()), vec.end());	
 
 	return vec;
+}
+
+std::string Automata::remove_duplicate_string(std::string str ){
+	std::sort(str.begin(), str.end());
+	str.erase(std::unique(str.begin(), str.end()), str.end());	
+
+	return str;
 }
 
 

@@ -24,12 +24,14 @@ void Automata_determinize::display() const {
 	}
 		cout << endl;
 
+
+
 	cout << "transition table:" << endl;
 	this->display_complete_dererministic_automaton();
 }
 
 void Automata_determinize::display_complete_dererministic_automaton() const {
-	const int nameWidth     = 6;
+	const int nameWidth     = 10;
     const int numWidth      = 15;
 	cout << "display_complete_dererministic_automaton"<<endl;
     // display banner with available states
@@ -91,13 +93,14 @@ void Automata_determinize::complete() {
 void Automata_determinize::determinaze(){
 	vector<string>  states;
 	map<string,vector<string>  > tmp_map;
-	cout <<"a"<<this->_init_states[_init_states.begin()->first][0]<<"a"<< endl;
+	
 
 	rec(this->_init_states[_init_states.begin()->first],tmp_map);
 
 	this->_transitions_table_determiniaze =  tmp_map;
 
 	this->define_new_init_final_states();
+	
 
 
 }
@@ -105,8 +108,8 @@ void Automata_determinize::determinaze(){
 void Automata_determinize::define_new_init_final_states(){
 	//init
 	// define new input state
-	
-	string init_states_concate = this->_init_states[_init_states.begin()->first][0];
+
+	string init_states_concate = this->concate_vector(this->_init_states[_init_states.begin()->first]);
 	this->_init_states_deterministic = init_states_concate;
 	//////
 	
@@ -115,9 +118,9 @@ void Automata_determinize::define_new_init_final_states(){
 	//final
 
 	//split final state
-
 	std::vector<std::string> tmp_vector;
 	tmp_vector = this->split_string(this->_final_states[_final_states.begin()->first][0]);
+
 	
 
 	//test matching
@@ -134,16 +137,17 @@ void Automata_determinize::define_new_init_final_states(){
 
 	} 	
 
-	this->_final_states_deterministic = this->remove_duplicate(this->_final_states_deterministic);
-		
 
+	this->_final_states_deterministic = this->remove_duplicate_vector(this->_final_states_deterministic);
+		
+	
 			
 }
 
 void Automata_determinize::rec(vector<string> states,std::map<string,std::vector<std::string>  > &table ){
 	
 	string states_concate = this->concate_vector(states);
-	cout << "a" << states_concate << "a"<< endl;
+	states_concate = this->remove_duplicate_string(states_concate);
 	
 
 	vector<string> tmp;
@@ -155,6 +159,7 @@ void Automata_determinize::rec(vector<string> states,std::map<string,std::vector
 			
 			for(int h=0;h<this->_transitions_table[atoi(states[i].c_str())][j].size();h++){
 				concate+=this->_transitions_table[atoi(states[i].c_str())][j][h];
+				concate = this->remove_duplicate_string(concate);
 			}
 			//cout << concate << endl;
 			
@@ -164,6 +169,7 @@ void Automata_determinize::rec(vector<string> states,std::map<string,std::vector
 		/*std::sort(concate.begin(), concate.end());
 		concate.erase(std::unique(concate.begin(), concate.end()), concate.end());	*/
 		
+
 		tmp.push_back(concate);
 	}
 	

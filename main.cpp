@@ -1,5 +1,6 @@
 #include "automata.h"
 #include "automata_determize.h"
+#include "comp_language.h"
 
 
 int main(){
@@ -10,39 +11,42 @@ int main(){
 
 	string name = "automata/FA_"+i+".txt";
 
-	Automata_determinize b(name);
+	Comp_language c(name);
 	
 	
 
-	if(b.is_an_asynchronous_automaton()){
-		b.asynchronous_to_synchronous();
-		b.determinaze();
-		if(b.is_complete()){
+	if(c.is_an_asynchronous_automaton()){
+		c.asynchronous_to_synchronous();
+		c.determinaze();
+		if(c.is_complete()){
 			//a.complete();
 		}
 	}
 	else{
-		b.synchronous_transition_table();
-		if((b.is_deterministic())){
-			if((b.is_complete())){
+		c.synchronous_transition_table();
+		if((c.is_deterministic())){
+			if((c.is_complete())){
 
-				b.determinaze();
-				b.complete();
-				//it should be completed before determinazing in real senario 
+				c.determinaze();
+				c.complete();
 			}
 			else{
 				
-				b.determinaze();
+				c.determinaze();
 			}
-			b.display();
+			c.Automata_determinize::display();
+			c.get_comp_automata();
+			c.display();
 		}
 		
 		else{
 			std::cout << "already determize" << std:: endl;
-			b.Automata::display();
+			c.Automata::display();
 			
 		}
 	}
+
+	
 
 
 
