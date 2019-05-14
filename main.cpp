@@ -1,38 +1,52 @@
 #include "automata.h"
-
+#include "automata_determize.h"
 
 
 int main(){
 
-	Automata a;
-	//a.transitions_table();
+	string i;
+	std::cout << "which FA do you want to use?" << std::endl;
+	cin >> i;
 
-	if(a.is_an_asynchronous_automaton()){
-		a.asynchronous_to_synchronous();
-		a.determinaze();
-		if(a.is_complete()){
-			a.complete();
+	string name = "automata/FA_"+i+".txt";
+
+	Automata_determinize b(name);
+	
+	
+
+	if(b.is_an_asynchronous_automaton()){
+		b.asynchronous_to_synchronous();
+		b.determinaze();
+		if(b.is_complete()){
+			//a.complete();
 		}
 	}
 	else{
-		a.synchronous_transition_table();
-		if((a.is_deterministic())){
-			if((a.is_complete())){
-				a.determinaze();
-				a.complete();
+		b.synchronous_transition_table();
+		if((b.is_deterministic())){
+			if((b.is_complete())){
+
+				b.determinaze();
+				b.complete();
 				//it should be completed before determinazing in real senario 
 			}
 			else{
 				
-				a.determinaze();
+				b.determinaze();
 			}
+			b.display();
 		}
+		
 		else{
-			a.determinaze();
+			std::cout << "already determize" << std:: endl;
+			b.Automata::display();
+			
 		}
 	}
 
-	a.display_complete_dererministic_automaton();
+
+
+	
 	
 	
 	
