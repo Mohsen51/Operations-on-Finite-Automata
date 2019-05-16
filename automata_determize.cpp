@@ -14,7 +14,7 @@ template<typename T> void printElement(T t, const int& width) {
 void Automata_determinize::display() const {
 
 	cout <<  endl;
-	cout << "2: AUTOMATA DETERMINISTIC "  << endl;	
+	cout << "1: AUTOMATA DETERMINISTIC "  << endl;	
 	cout <<  endl;
 	cout << "initial state(s):" << endl;
 	
@@ -285,9 +285,9 @@ void Automata_determinize::read_word()
 	{
 		cout << "Please enter a word (type 'end' to quit)" << endl;
 		cin >> word;
-		cout << recognize_word(word,this->_init_states_deterministic,0) << endl;
-	} while (word!="end");
-	
+		if (word!="end")
+			cout << recognize_word(word,this->_init_states_deterministic,0) << endl;
+	} while (word!="end");	
 }
 
 bool Automata_determinize::recognize_word(string word, string state, int index)

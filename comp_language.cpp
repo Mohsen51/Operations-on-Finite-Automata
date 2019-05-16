@@ -15,7 +15,7 @@ Comp_language::Comp_language(string name):Automata_determinize(name){
 
 void Comp_language::display() const{
 	cout <<  endl;
-	cout << "3: AUTOMATA COMPLEMANTARY LANGUAGE "  << endl;	
+	cout << "2: AUTOMATA COMPLEMANTARY LANGUAGE "  << endl;	
 	cout <<  endl;
 	cout << "initial state(s):" << endl;
 	
@@ -73,7 +73,8 @@ void Comp_language::read_word()
 	{
 		cout << "Please enter a word (type 'end' to quit)" << endl;
 		cin >> word;
-		cout << recognize_word(word,this->_init_states_deterministic,0) << endl;
+		if (word!="end")
+			cout << recognize_word(word,this->_init_states_deterministic,0) << endl;
 	} while (word!="end");
 	
 }

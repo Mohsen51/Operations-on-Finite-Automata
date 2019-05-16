@@ -67,7 +67,7 @@ void Automata::get_data_from_file(string name) {
 void Automata::display() const{
 
 	cout <<  endl;
-	cout << "1: AUTOMATA "  << endl;	
+	cout << "AUTOMATA "  << endl;	
 	cout <<  endl;
 
 	cout << "initial state(s):" << endl;

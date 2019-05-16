@@ -63,7 +63,7 @@ void Automata_standardize::standardize(){
 }
 
 void Automata_standardize::display()  {
-	cout << "STANDARDIZE AUTOMATA" << endl;
+	cout << "3: STANDARDIZE AUTOMATA" << endl;
 
 	cout << "initial state(s):" << endl;
 	
@@ -133,7 +133,8 @@ void Automata_standardize::read_word()
 	{
 		cout << "Please enter a word (type 'end' to quit)" << endl;
 		cin >> word;
-		cout << recognize_word(word,this->_init_states_standardize,0) << endl;
+		if (word!="end")
+			cout << recognize_word(word,this->_init_states_standardize,0) << endl;
 	} while (word!="end");
 	
 }
