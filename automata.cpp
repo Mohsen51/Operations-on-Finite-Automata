@@ -145,7 +145,7 @@ bool Automata::is_an_asynchronous_automaton() const{
 	if(tmp.size()>1){
 		i=1;
 		cout << "the automata is asynchronous" << endl;
-		cout << "the following transitions are astnchronous:" << endl;
+		cout << "the following transitions are asynchronous:" << endl;
 		for(vector<string>::const_iterator line = tmp.begin(); line != tmp.end(); ++line) {
 			cout << *line << endl;
 
@@ -216,7 +216,7 @@ bool Automata::is_complete() const {
 		 		if(tmp =="")
 		 		{
 		 			i=1;
-		 			cout << "state " << at->first<< " transition "<< char(97+j)<<" not complite"<< endl;
+		 			cout << "state " << at->first<< " transition "<< char(97+j)<<" not complete"<< endl;
 		 		}
 		 	j++;	
 		}
@@ -354,15 +354,4 @@ std::string Automata::remove_duplicate_string(std::string str ){
 
 	return str;
 }
-
-
-
-
-
-
-
-
-
-
-
 

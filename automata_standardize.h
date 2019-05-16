@@ -24,9 +24,11 @@ public:
 	void define_state_i_as_init_state();
 	bool is_standardize();
 	void standardize();
-
 	void display();
-	void display_standardize_automaton() ;
+	void display_standardize_automaton();
+	void read_word(); 
+	bool recognize_word(std::string, std::string, int);
+	bool find_letter_in_vector(std::string);
 
 
 

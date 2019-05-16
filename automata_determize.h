@@ -24,6 +24,9 @@ public:
 	void rec(std::vector<std::string> ,std::map<std::string,std::vector<std::string>  > & );
 	void define_new_init_final_states();
 	void adapt_transition_table_if_already_deterministic();
+	void read_word(); 
+	bool recognize_word(std::string, std::string, int);
+	bool find_letter_in_vector(std::string);
 
 protected:
 	std::string   _init_states_deterministic;

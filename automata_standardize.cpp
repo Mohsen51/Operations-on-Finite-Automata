@@ -41,7 +41,7 @@ bool Automata_standardize::is_standardize(){
 		 	for(vector<string> ::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
 
 		 		if(*it == this->_init_states_deterministic){
-					cout <<"not standardize"<<endl; 
+					cout <<"not standardized"<<endl; 
 					tmp = 1;
 		 		}
 		}
@@ -51,7 +51,7 @@ bool Automata_standardize::is_standardize(){
 	if( tmp==0){
 		this->_init_states_standardize = this->_init_states_deterministic;
 		this->_transitions_table_standardize = this->_transitions_table_determiniaze;
-		std::cout << "already standardize" << std:: endl;
+		std::cout << "already standardized" << std:: endl;
 	}
 	return tmp;
 
@@ -113,4 +113,54 @@ void Automata_standardize::display_standardize_automaton() {
 		
 	}
 
+}
+
+bool Automata_standardize::find_letter_in_vector(string index)
+{
+	//cout << "ind" << index << endl;
+	for(vector<string> ::const_iterator at = this->_final_states_comp_language.begin(); at != this->_final_states_comp_language.end(); ++at) {
+		//cout << "at " << *at << endl;
+		if (index == *at)
+			return 1;
+	}
+	return 0;
+}
+
+void Automata_standardize::read_word()
+{
+	string word;
+	do
+	{
+		cout << "Please enter a word (type 'end' to quit)" << endl;
+		cin >> word;
+		cout << recognize_word(word,this->_init_states_standardize,0) << endl;
+	} while (word!="end");
+	
+}
+
+bool Automata_standardize::recognize_word(string word, string state, int index)
+{
+	if (index<=word.size()-1)
+	{
+		int nbr= (int)word[index]-97; 
+		string value=this->_transitions_table_standardize[state][nbr];
+		if (value == "" && !find_letter_in_vector(value))
+		{ 
+			return 0;
+		}
+		else if (find_letter_in_vector(value) && index==word.size()-1)
+		{
+			return 1;
+		}
+		else
+		{
+			return recognize_word(word,value,index+1);
+		}
+		
+	}
+	else
+	{
+		return 0;
+	}
+	
 }

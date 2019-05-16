@@ -119,7 +119,7 @@ bool Automata_determinize::is_deterministic() {
 	}
 
 	if(i==0){
-			std::cout << "already determize" << std:: endl;
+			std::cout << "already determinized" << std:: endl;
 			this->adapt_transition_table_if_already_deterministic();
 	}
 	return i;
@@ -265,16 +265,55 @@ void Automata_determinize::rec(vector<string> states,std::map<string,std::vector
 
 	
 	}
-
-		
-		
-		
-	
-
-	
-
-
 }
 
+bool Automata_determinize::find_letter_in_vector(string index)
+{
+	//cout << "ind" << index << endl;
+	for(vector<string> ::const_iterator at = this->_final_states_deterministic.begin(); at != this->_final_states_deterministic.end(); ++at) {
+		//cout << "at " << *at << endl;
+		if (index == *at)
+			return 1;
+	}
+	return 0;
+}
 
+void Automata_determinize::read_word()
+{
+	string word;
+	do
+	{
+		cout << "Please enter a word (type 'end' to quit)" << endl;
+		cin >> word;
+		cout << recognize_word(word,this->_init_states_deterministic,0) << endl;
+	} while (word!="end");
+	
+}
+
+bool Automata_determinize::recognize_word(string word, string state, int index)
+{
+	if (index<=word.size()-1)
+	{
+		int nbr= (int)word[index]-97; 
+		string value=this->_transitions_table_determiniaze[state][nbr];
+		if (value == "" && !find_letter_in_vector(value))
+		{ 
+			return 0;
+		}
+		else if (find_letter_in_vector(value) && index==word.size()-1)
+		{
+			return 1;
+		}
+		else
+		{
+			return recognize_word(word,value,index+1);
+		}
+		
+	}
+	else
+	{
+		return 0;
+	}
+	
+}
 

@@ -49,23 +49,27 @@ int main(){
 		c.Automata_determinize::display();
 		c.Comp_language::display();
 		c.display();
-
+		int choice;
+		cout << "In which table do you want to check your word ? (1:Deterministic, 2:Complementary language, 3:Standardized or any other number if you don't want to check any word)" << endl;
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			c.Automata_determinize::read_word();
+			break;
+		case 2:
+			c.Comp_language::read_word();
+			break;
+		case 3:
+			c.Automata_standardize::read_word();
+			break;
+		default:
+			break;
+		}
 		
-		std::cout << "Do you want to test an another Automata: enter 1 or 0" << std::endl;
+		cout << "Do you want to test another Automata ? (enter 1 if yes, else 0)" << endl;
 		cin >> test;		
 	}
-	
-	
-
-
-	
-
-
-
-	
-	
-	
-	
-	
+		
 	return 0;
 }
