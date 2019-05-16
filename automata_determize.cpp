@@ -13,6 +13,7 @@ template<typename T> void printElement(T t, const int& width) {
 
 void Automata_determinize::display() const {
 
+	cout <<  endl;
 	cout << "2: AUTOMATA DETERMINISTIC "  << endl;	
 	cout <<  endl;
 	cout << "initial state(s):" << endl;
@@ -119,13 +120,45 @@ bool Automata_determinize::is_deterministic() {
 
 	if(i==0){
 			std::cout << "already determize" << std:: endl;
-			this->_final_states_deterministic = this->_final_states;
-			this->_init_states_deterministic = this->_init_states[0];
+			this->adapt_transition_table_if_already_deterministic();
 	}
 	return i;
 
 }
 
+void Automata_determinize::adapt_transition_table_if_already_deterministic(){
+
+		this->_final_states_deterministic = this->_final_states;
+		this->_init_states_deterministic = this->_init_states[0];
+
+
+		for(map<int,vector<vector<string> > >::const_iterator at = this->_transitions_table.begin(); at != this->_transitions_table.end(); ++at) {
+
+			vector<string> tmp_vec;
+			for(vector<vector<string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
+	 		string tmp = "";
+	 		string value = "";
+	 		for(vector<string>::const_iterator et = it->begin(); et != it->end(); ++et){
+	 			tmp += *et+" ";
+	 			value = *et;
+	 		}
+	 		if(tmp =="")
+	 		{
+	 			string space = "_";
+	 			tmp_vec.push_back(space);
+	 		}
+	 		else{
+	 			tmp_vec.push_back(value);
+	 		}
+		 	
+	 			
+		 	this->_transitions_table_determiniaze[to_string(at->first)] = tmp_vec;
+		 	tmp.clear();
+	 			}
+	
+			
+		}
+}
 
 void Automata_determinize::determinaze(){
 	vector<string>  states;

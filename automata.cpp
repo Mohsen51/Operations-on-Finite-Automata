@@ -37,13 +37,20 @@ void Automata::get_data_from_file(string name) {
     	string s(1, tmp);	 
     	_tmp_vector.push_back(s);
     }
-
-
-    this->_init_states = _tmp_vector;
+	
+	this->_init_states = _tmp_vector;
     _tmp_vector.clear();
 
     getline(file,line);
-	_tmp_vector.push_back(line.erase(0,2));
+	 string x = line.substr(0,1);
+    size = atoi(x.c_str());
+   
+    for(int i=0;i<(size*2)-1;i++){
+    	 char tmp = line[i+2];
+    	string s(1, tmp);	 
+    	_tmp_vector.push_back(s);
+    }
+
     this->_final_states = _tmp_vector;
     _tmp_vector.clear();
 
@@ -53,13 +60,13 @@ void Automata::get_data_from_file(string name) {
     while(getline(file,line)) {
      	this->_transitions.push_back(line);
     }
-     cout << "data in memory" << endl;
+   
 
 }
 
 void Automata::display() const{
 
-
+	cout <<  endl;
 	cout << "1: AUTOMATA "  << endl;	
 	cout <<  endl;
 

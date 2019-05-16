@@ -14,7 +14,7 @@ Comp_language::Comp_language(string name):Automata_determinize(name){
 }
 
 void Comp_language::display() const{
-
+	cout <<  endl;
 	cout << "3: AUTOMATA COMPLEMENTARY LANGUAGE "  << endl;	
 	cout <<  endl;
 	cout << "initial state(s):" << endl;
