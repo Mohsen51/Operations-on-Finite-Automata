@@ -12,6 +12,9 @@ template<typename T> void printElement(T t, const int& width) {
 }
 
 void Automata_determinize::display() const {
+
+	cout << "2: AUTOMATA DETERMINISTIC "  << endl;	
+	cout <<  endl;
 	cout << "initial state(s):" << endl;
 	
 	cout << this->_init_states_deterministic << endl;
@@ -33,7 +36,7 @@ void Automata_determinize::display() const {
 void Automata_determinize::display_complete_dererministic_automaton() const {
 	const int nameWidth     = 10;
     const int numWidth      = 15;
-	cout << "display_complete_dererministic_automaton"<<endl;
+
     // display banner with available states
 	printElement("S", nameWidth);
 	for(int i=0; i<this->_nb_transitions_available; i++) {
@@ -89,13 +92,47 @@ void Automata_determinize::complete() {
 	}
 }
 
+bool Automata_determinize::is_deterministic() {
+	int i=0;
+	if(_init_states.size()>1){
+		i=1;
+		cout <<" not deterministic because of mutiple entries"<< endl;
+	}
+	int j;
+	for(map<int,vector<vector<string> > >::const_iterator at = this->_transitions_table.begin(); at != this->_transitions_table.end(); ++at) {
+			j = 0;
+		 	for(vector<vector<string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
+		 		string tmp = "";
+		 		for(vector<string>::const_iterator et = it->begin(); et != it->end(); ++et){
+		 			tmp += *et+" ";
+		 		}
+		 		
+		 		if( tmp.size()>2)
+		 		{
+		 			i=1;
+		 			cout << " not deterministic because of mutiple transitons possible for state " << at->first<< " transition "<< char(97+j)<< endl;
+		 		}
+		 	j++;	
+		}
+		
+	}
+
+	if(i==0){
+			std::cout << "already determize" << std:: endl;
+			this->_final_states_deterministic = this->_final_states;
+			this->_init_states_deterministic = this->_init_states[0];
+	}
+	return i;
+
+}
+
 
 void Automata_determinize::determinaze(){
 	vector<string>  states;
 	map<string,vector<string>  > tmp_map;
 	
 
-	rec(this->_init_states[_init_states.begin()->first],tmp_map);
+	rec(this->_init_states,tmp_map);
 
 	this->_transitions_table_determiniaze =  tmp_map;
 
@@ -109,7 +146,7 @@ void Automata_determinize::define_new_init_final_states(){
 	//init
 	// define new input state
 
-	string init_states_concate = this->concate_vector(this->_init_states[_init_states.begin()->first]);
+	string init_states_concate = this->concate_vector(this->_init_states);
 	this->_init_states_deterministic = init_states_concate;
 	//////
 	
@@ -119,7 +156,7 @@ void Automata_determinize::define_new_init_final_states(){
 
 	//split final state
 	std::vector<std::string> tmp_vector;
-	tmp_vector = this->split_string(this->_final_states[_final_states.begin()->first][0]);
+	tmp_vector = this->split_string(this->_final_states[0]);
 
 	
 
@@ -129,7 +166,7 @@ void Automata_determinize::define_new_init_final_states(){
 	 		for(int i=0;i<tmp_vector.size();i++){
 	 			for(int j=0;j<tmp_index_split.size();j++){
 	 				if(tmp_vector[i]==tmp_index_split[j]){
-	 					this->_final_states_deterministic.push_back(tmp_vector[i]);
+	 					this->_final_states_deterministic.push_back(at->first);
 	 				}
 	 			}
 	 		}

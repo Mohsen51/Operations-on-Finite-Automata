@@ -19,11 +19,9 @@ public:
 	void display() const;
 	void get_comp_automata();
 
-private:
+protected:
 	vector<std::string>  _final_states_comp_language;
-	std::map<std::string,std::vector<std::string> > _transitions_table_comp_language;
+
+
 };
-
-
-
 #endif

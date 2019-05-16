@@ -20,6 +20,7 @@ public:
 	void display_complete_dererministic_automaton() const;
 	void complete();
 	void determinaze();	
+	bool is_deterministic();
 	void rec(std::vector<std::string> ,std::map<std::string,std::vector<std::string>  > & );
 	void define_new_init_final_states();
 

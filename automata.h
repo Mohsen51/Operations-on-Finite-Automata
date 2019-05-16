@@ -23,7 +23,7 @@ class Automata{
 		
 		void synchronous_transition_table() ;
 		bool is_complete() const ;
-		bool is_deterministic() const;
+		
 
 
 		std::vector<std::string> split_string(std::string );
@@ -41,8 +41,8 @@ class Automata{
 	protected:
 		int _nb_transitions_available;
 		int _nb_states;
-		std::map<int, std::vector<std::string> >  _init_states;
-		std::map<int, std::vector<std::string> >  _final_states;
+		std::vector<std::string>   _init_states;
+		std::vector<std::string>   _final_states;
 		int _nb_transitions;
 		std::vector<std::string> _transitions;
 		std::map<int,std::vector<std::vector<std::string> > > _transitions_table;

@@ -38,12 +38,13 @@ void Automata::get_data_from_file(string name) {
     	_tmp_vector.push_back(s);
     }
 
-    this->_init_states[atoi(&line[0])] = _tmp_vector;
+
+    this->_init_states = _tmp_vector;
     _tmp_vector.clear();
 
     getline(file,line);
 	_tmp_vector.push_back(line.erase(0,2));
-    this->_final_states[atoi(&line[0])] = _tmp_vector;
+    this->_final_states = _tmp_vector;
     _tmp_vector.clear();
 
 	getline(file,line);
@@ -58,17 +59,21 @@ void Automata::get_data_from_file(string name) {
 
 void Automata::display() const{
 
+
+	cout << "1: AUTOMATA "  << endl;	
+	cout <<  endl;
+
 	cout << "initial state(s):" << endl;
 	
-	for(map<int,vector<string> >::const_iterator at = this->_init_states.begin(); at != this->_init_states.end(); ++at) {
-		cout << (at->second).front()  << endl;
+	for(vector<string> ::const_iterator at = this->_init_states.begin(); at != this->_init_states.end(); ++at) {
+		cout << *at  << endl;
 	}
 
 	cout << "final state(s):" << endl;
 	
 	
-	for(map<int,vector<string> >::const_iterator at = this->_final_states.begin(); at != this->_final_states.end(); ++at) {
-		cout << (at->second).front()  << endl;
+	for(vector<string> ::const_iterator at = this->_final_states.begin(); at != this->_final_states.end(); ++at) {
+		cout << *at << endl;
 	}
 
 	cout << "transition table:" << endl;
@@ -148,7 +153,7 @@ bool Automata::is_an_asynchronous_automaton() const{
 void Automata::synchronous_transition_table() {
 	
 	vector<string>  states;
-	map<int,vector<vector<string> > > map1;
+	
 	vector<vector<string> >  table(this->_nb_transitions_available, vector<string> (1, "-"));
 	
 	
@@ -187,33 +192,7 @@ void Automata::synchronous_transition_table() {
 }
 
 
-bool Automata::is_deterministic() const {
-	int i=0;
-	if(_init_states.begin()->first>1){
-		i=1;
-		cout <<" not deterministic because of mutiple entries"<< endl;
-	}
-	int j;
-	for(map<int,vector<vector<string> > >::const_iterator at = this->_transitions_table.begin(); at != this->_transitions_table.end(); ++at) {
-			j = 0;
-		 	for(vector<vector<string> >::const_iterator it = (at->second).begin(); it != (at->second).end(); ++it) {
-		 		string tmp = "";
-		 		for(vector<string>::const_iterator et = it->begin(); et != it->end(); ++et){
-		 			tmp += *et+" ";
-		 		}
-		 		
-		 		if( tmp.size()>2)
-		 		{
-		 			i=1;
-		 			cout << " not deterministic because of mutiple transitons possible for state " << at->first<< " transition "<< char(97+j)<< endl;
-		 		}
-		 	j++;	
-		}
-		
-	}
-	return i;
 
-}
 
 
 

@@ -1,6 +1,7 @@
 #include "automata.h"
 #include "automata_determize.h"
 #include "comp_language.h"
+#include "automata_standardize.h"
 
 
 int main(){
@@ -11,40 +12,45 @@ int main(){
 
 	string name = "automata/FA_"+i+".txt";
 
-	Comp_language c(name);
+	Automata_standardize c(name);
 	
 	
-
+	// define the transition table
 	if(c.is_an_asynchronous_automaton()){
 		c.asynchronous_to_synchronous();
-		c.determinaze();
-		if(c.is_complete()){
-			//a.complete();
-		}
 	}
 	else{
 		c.synchronous_transition_table();
-		if((c.is_deterministic())){
-			if((c.is_complete())){
+	}
+	
+	//determinize and complete
+	if((c.is_deterministic())){
 
-				c.determinaze();
-				c.complete();
-			}
-			else{
-				
-				c.determinaze();
-			}
-			c.Automata_determinize::display();
-			c.get_comp_automata();
-			c.display();
+		if((c.is_complete())){
+			c.determinaze();
+			c.complete();
 		}
-		
 		else{
-			std::cout << "already determize" << std:: endl;
-			c.Automata::display();
-			
+			c.determinaze();
 		}
 	}
+	
+	// Automata complementary language
+	c.get_comp_automata();
+
+	// Standardize
+	if(c.is_standardize()){
+		c.standardize();
+		
+	}
+
+	c.Automata::display();
+	c.Automata_determinize::display();
+	c.Comp_language::display();
+	c.display();
+	
+	
+
 
 	
 
