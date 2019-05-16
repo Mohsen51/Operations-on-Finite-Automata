@@ -74,7 +74,12 @@ void Comp_language::read_word()
 		cout << "Please enter a word (type 'end' to quit)" << endl;
 		cin >> word;
 		if (word!="end")
-			cout << recognize_word(word,this->_init_states_deterministic,0) << endl;
+		{
+			if (recognize_word(word,this->_init_states_deterministic,0))
+				cout << "The word '" << word << "' is well recognized by the automaton !" << endl;
+			else	
+			 	cout << "The word '" << word << "' is not recognized by the automaton." << endl;
+		}
 	} while (word!="end");
 	
 }
