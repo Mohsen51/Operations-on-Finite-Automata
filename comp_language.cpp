@@ -43,12 +43,12 @@ void Comp_language::get_comp_automata(){
 
 	 for(std::map<std::string,std::vector<std::string> >::const_iterator at = this->_transitions_table_determiniaze.begin(); at != this->_transitions_table_determiniaze.end(); ++at) {
 	 	
-	 	for(std::vector<std::string> ::const_iterator it = this->_final_states_deterministic.begin(); it != this->_final_states_deterministic.end(); ++it) {
-	 	if(at->first !=  *it){
+	 		
+	 	if(!this->Automata_determinize::find_letter_in_vector(at->first)){
 	 		this-> _final_states_comp_language.push_back(at->first);	
 	 	}
 
-	 }
+	
 	}
 
 	this->_final_states_comp_language = this->remove_duplicate_vector(this-> _final_states_comp_language);
