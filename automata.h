@@ -1,7 +1,7 @@
 #ifndef AUTOMATA_H
 #define AUTOMATA_H
 
-#include<fstream>
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -11,6 +11,7 @@
 #include <algorithm>
 
 using namespace std;
+
 class Automata{
 	public:
 		Automata(string);
