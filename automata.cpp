@@ -73,15 +73,17 @@ void Automata::display() const{
 	cout << "initial state(s):" << endl;
 	
 	for(vector<string> ::const_iterator at = this->_init_states.begin(); at != this->_init_states.end(); ++at) {
-		cout << *at  << endl;
+		cout << *at ;
 	}
+	cout <<  endl;
 
 	cout << "final state(s):" << endl;
 	
 	
 	for(vector<string> ::const_iterator at = this->_final_states.begin(); at != this->_final_states.end(); ++at) {
-		cout << *at << endl;
+		cout << *at;
 	}
+	cout <<  endl;
 
 	cout << "transition table:" << endl;
 	this->display_transition_table();
@@ -168,10 +170,32 @@ void Automata::synchronous_transition_table() {
 		vector<string> list;
 		for(int t=0;t<this->_nb_transitions_available;t++){
 			for(vector<string>::const_iterator line = _transitions.begin(); line != _transitions.end(); ++line) {
-				if(atoi(&(*line)[0])==i && (t==(int((*line)[1])-97))){
-					string tmp;
-					tmp = line[0][2];
-					list.push_back(tmp);
+				int index_left;
+				int transition;
+				
+				//check the position of the transition letter
+	
+				if(int((*line)[1])-97 >= 0){
+					//covnersion from str to int 
+					index_left = atoi(&(*line)[0]);
+					transition = int((*line)[1])-97;
+
+					if(index_left==i && (t==transition)){
+						string tmp;
+						tmp = line[0][2];
+						list.push_back(tmp);
+					}
+				}
+				else{
+					//covnersion from str to int 
+					index_left = (atoi(&(*line)[0])+atoi(&(*line)[1]));
+					transition = (int((*line)[2])-97);
+					if(index_left==i && (t==(transition))){		
+
+						string tmp;
+						tmp = line[0][3];
+						list.push_back(tmp);
+					}
 				}
 
 			}
@@ -286,7 +310,9 @@ void Automata::recursive(int t,int i,int lamba,vector<string> _transitions,vecto
 		//cout <<*line <<" t"<<t << " i"<<i<< "lambda" << lamba <<endl;
 		
 	if((*line)!=" "){
-		if(( ((*line)[0]==(*line)[2] && (int((*line)[1])-97)==t && !lamba && (atoi(&(*line)[0])==i)) || ((atoi(&(*line)[0])==i) && (t==(int((*line)[1])-97)) && !lamba))){
+		int index_left  = atoi(&(*line)[0]);
+		int transition = int((*line)[1])-97;
+		if(( ((*line)[0]==(*line)[2] && transition==t && !lamba && index_left==i)) || (((index_left==i) && (t==transition) && !lamba))){
 			//cout <<"1"<< endl;
 			string tmp;
 			tmp = line[0][2];
@@ -297,7 +323,7 @@ void Automata::recursive(int t,int i,int lamba,vector<string> _transitions,vecto
 		}
 
 		else{
-			if( (atoi(&(*line)[0])==i) && (42==(int((*line)[1]))) && lamba){
+			if( (index_left==i) && (42==(int((*line)[1]))) && lamba){
 				//cout <<"2"<< endl;
 				string tmp;
 				tmp = line[0][2];
@@ -305,7 +331,7 @@ void Automata::recursive(int t,int i,int lamba,vector<string> _transitions,vecto
 				recursive(t,atoi(&(*line)[2]),1,_transitions,list);
 			}
 			else{
-				if((atoi(&(*line)[0])==i) && (42==(int((*line)[1]))) && !lamba){
+				if((index_left==i) && (42==(int((*line)[1]))) && !lamba){
 					//cout <<"3"<< endl;
 					recursive(t,atoi(&(*line)[2]),0,_transitions,list);
 				}
@@ -317,6 +343,32 @@ void Automata::recursive(int t,int i,int lamba,vector<string> _transitions,vecto
 	}
 	
 
+}
+
+
+void Automata::return_formated_index(string line,string &index_left,int &transition){
+	
+		
+	if(this->conver_transiiton_letter_to_int(line,1) >=0 ){
+		index_left = this->conver_string_to_int(line,0);
+		transition = this->conver_transiiton_letter_to_int(line,1);
+	}
+	else{
+		index_left = this->conver_string_to_int(line,0)+ this->conver_string_to_int(line,1);
+		transition = this->conver_transiiton_letter_to_int(line,2);
+	}
+	
+
+
+
+}
+
+int Automata::conver_string_to_int(string str, int index){
+	return atoi(&(str)[index]);
+}
+
+int Automata::conver_transiiton_letter_to_int(string str, int index){
+	return int((str)[index]);
 }
 
 std::vector<std::string> Automata::split_string(std::string str) {

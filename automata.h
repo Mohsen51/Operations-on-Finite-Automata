@@ -26,6 +26,9 @@ class Automata{
 		
 
 
+		void return_formated_index(string ,string&,int&);
+		int conver_transiiton_letter_to_int(string, int );
+		int conver_string_to_int(string, int);
 		std::vector<std::string> split_string(std::string );
 		std::string concate_vector(std::vector<std::string>);
 		std::vector<std::string> remove_duplicate_vector(std::vector<std::string>  );
