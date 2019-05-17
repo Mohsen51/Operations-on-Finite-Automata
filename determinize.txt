@@ -1,0 +1,93 @@
+
+INPUT:
+
+map<int,double array of string > transition_table
+
+
+OUTPUT EXPECTED:
+
+map<string,array of string > transition_table_determinize
+string init_states
+array of string final_states
+
+
+function determinize()
+{
+	begin
+
+		transition_table_determinize = recursive_determinize(init_states,tmp_map)
+
+		define_new_init_states()
+
+	end
+
+}
+
+
+function recursive_determinize(array of string:states,map<string,array of string >:tmp_map)
+{
+	begin
+	
+		// iterate the map 
+
+		for i from 1 to nb_transiiton_available DO: (iterate transiiton available)
+		{
+
+			for j from 1 to length(states) DO: (iterate states)
+			{
+				//addition of the value of each state for each transition 
+				for k from 1 to length(map) DO: (iterator transition_table)
+				{
+					// sum of one state
+					sum = sum + map[i][j][k]
+				}
+			// array of the sum states
+			array_of_summed_state[j] = sum
+			}
+		}
+		//definition of the new state
+		map[state] = array_of_summed_state	
+
+		// check if the state is not define yet 
+
+			for j from 1 to length(states) DO: (iterate states)
+			{
+				//addition of the value of each state for each transition 
+				for k from 1 to length(map) DO: (iterator transition_table)
+				{
+					// sum of one state
+					sum = sum + map[i][j][k]
+				}
+
+				if map[state][j] > 0 DO:
+					//if the state not in map 
+					recursive_determinize(sum,map)
+			}
+
+	end
+}
+
+
+function define_new_init_final_states()
+{
+	begin
+
+		//init states
+		init_state_deterministic = concate(init_state)
+
+		//final states
+		// iterate the new map to find final state
+		for i from 1 to nb_transiiton_available DO: (iterate map)
+		{
+
+			for j from 1 to length(array of transition) DO: (iterate array)
+			{
+					
+				IF state in init_sates DO:
+					final_states = final_states + states
+
+			}
+		}
+
+	end
+}
