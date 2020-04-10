@@ -301,7 +301,7 @@ std::string Automata::concate_vector(std::vector<std::string> str){
 	return tmp;
 }
 
-//work for bith string and vector
+//work for both string and vector
 std::vector<std::string> Automata::remove_duplicate_vector(std::vector<std::string> vec ){
 	std::sort(vec.begin(), vec.end());
 	vec.erase(std::unique(vec.begin(), vec.end()), vec.end());	
