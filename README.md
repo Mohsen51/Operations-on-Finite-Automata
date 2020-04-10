@@ -1,8 +1,8 @@
 # Algortihms to analyse automata
 
-###1/Displaying FA on screen
-###2/Determinization and completion
-###3/Complementary Language
+### 1/Displaying FA on screen
+### 2/Determinization and completion
+### 3/Complementary Language
 
 ### Prerequisites
 
@@ -14,7 +14,7 @@ C++ compiler
 g++ main.cpp -a main
 ```
 
-### Deployment
+### Run 
 
 ```
 ./main
